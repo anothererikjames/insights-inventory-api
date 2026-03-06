@@ -1,0 +1,24 @@
+name: Postman Collection Run
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  postman:
+    runs-on: ubuntu-latest
+    name: Run Inventory Tests
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Postman CLI
+        run: curl -o- "https://dl-cli.pstmn.io/install.sh" | sh
+
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+
+      - name: Run Postman Collection
+        run: |
+          postman collection run "52238111-2607d3bd-795d-40ba-8205-0d61916f6820" \
+            --environment "52238111-83fedf35-a239-4585-9d6b-ff59eacb7aba" \
+            --verbose
